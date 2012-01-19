@@ -9,18 +9,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Filter" />
-    
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:onClick="regiset"
-        android:text="注册拦截" />
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:onClick="unregiset"
-        android:text="解注册拦截" />
 
 </LinearLayout>

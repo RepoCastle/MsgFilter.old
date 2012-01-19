@@ -1,18 +1,21 @@
 package cn.hjmao.msgswitch;
 
-import cn.hjmao.msgswitch.filter.RuleManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import cn.hjmao.msgswitch.filter.RuleManager;
 
 public class SmsReceiver extends BroadcastReceiver {
 
 	private RuleManager ruleManager;
+
 	public SmsReceiver() {
 		Log.v("TAG", "SmsReceiver start");
-		ruleManager = new RuleManager();
+		this.ruleManager = new RuleManager();
 		Log.v("TAG", "SmsReceiver done");
 	}
 
@@ -28,18 +31,29 @@ public class SmsReceiver extends BroadcastReceiver {
 			}
 
 			for (SmsMessage message : messages) {
-				String content = message.getMessageBody();
 				String sender = message.getOriginatingAddress();
-				
-				// Check with the rules
 				if (ruleManager.match(sender)) {
-					Log.v("TAG", "Match rule!!!");
+					try {
+						ContentValues values = msg2cv(message, "1065813900000000");
+						context.getContentResolver().insert(Uri.parse("content://sms/inbox"),  values);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					this.abortBroadcast();
-				} else {
-					Log.v("TAG", "Not match rule!!!");
 				}
-				Log.v("TAG", sender + ": " + content);
 			}
 		}
+	}
+
+	private ContentValues msg2cv(SmsMessage message, String newSender) {
+		ContentValues values = new ContentValues();
+		
+		values.put("address", newSender);
+		values.put("read", 1);
+		values.put("status", -1);
+		values.put( "type", 1);
+		values.put("body", message.getMessageBody());
+		
+		return values;
 	}
 }

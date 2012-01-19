@@ -10,7 +10,7 @@ public class RuleManager {
 		String rule = "^10658139.*";
 		addRule(rule);
 	}
-	
+
 	public void addRule(String rule) {
 		rules.add(rule);
 	}
