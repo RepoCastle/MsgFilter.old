@@ -30,11 +30,16 @@ public class SmsReceiver extends BroadcastReceiver {
 				messages[i] = SmsMessage.createFromPdu(pdu);
 			}
 
+			String content = "";
 			for (SmsMessage message : messages) {
-				String sender = message.getOriginatingAddress();
+				content += message.getMessageBody();
+			}
+			
+			if (messages.length > 0) {
+				String sender = messages[0].getOriginatingAddress();
 				if (ruleManager.match(sender)) {
 					try {
-						ContentValues values = msg2cv(message, "1065813900000000");
+						ContentValues values = msg2cv(content, "1065813900000000");
 						context.getContentResolver().insert(Uri.parse("content://sms/inbox"),  values);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -45,14 +50,14 @@ public class SmsReceiver extends BroadcastReceiver {
 		}
 	}
 
-	private ContentValues msg2cv(SmsMessage message, String newSender) {
+	private ContentValues msg2cv(String content, String newSender) {
 		ContentValues values = new ContentValues();
 		
 		values.put("address", newSender);
 		values.put("read", 1);
 		values.put("status", -1);
 		values.put( "type", 1);
-		values.put("body", message.getMessageBody());
+		values.put("body", content);
 		
 		return values;
 	}
