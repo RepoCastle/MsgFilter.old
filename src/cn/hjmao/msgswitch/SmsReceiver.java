@@ -22,6 +22,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.v("TAG", "onReceive");
+
 		Object[] pdus = (Object[]) intent.getExtras().get("pdus");
 		if (pdus != null && pdus.length > 0) {
 			SmsMessage[] messages = new SmsMessage[pdus.length];
@@ -52,13 +53,11 @@ public class SmsReceiver extends BroadcastReceiver {
 
 	private ContentValues msg2cv(String content, String newSender) {
 		ContentValues values = new ContentValues();
-		
 		values.put("address", newSender);
-		values.put("read", 1);
+		values.put("read", 0);
 		values.put("status", -1);
 		values.put( "type", 1);
 		values.put("body", content);
-		
 		return values;
 	}
 }
