@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">MsgSwitch</string>
+    <string name="app_name">MsgFilter</string>
+    
+    <string name="button_ok">OK</string>
+    
+    <string name="hint_pattern">Number Pattern</string>
+    <string name="hint_dstnum">Destination Number</string>
 
+    <string name="rule_edit_title">Edit Rule</string>
+    
+    <string name="menu_open">Open</string>
+    <string name="menu_copy">Copy</string>
+    <string name="menu_delete">Delete</string>
+    
+    <string name="menu_add">New Rule</string>
+    <string name="menu_save">Save</string>
+    <string name="menu_paste">Paste</string>
+    
+    
+    <string name="rule_create">New Rule</string>
+    <string name="rule_edit">Edit: %1$s</string>
+    
+    
+    <string name="error_pattern">Error</string>
+    <string name="error_message">Error loading note</string>
 </resources>

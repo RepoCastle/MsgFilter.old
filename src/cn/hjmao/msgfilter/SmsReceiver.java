@@ -1,4 +1,4 @@
-package cn.hjmao.msgswitch;
+package cn.hjmao.msgfilter;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
@@ -7,12 +7,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.telephony.SmsMessage;
 import android.util.Log;
-import cn.hjmao.msgswitch.filter.RuleManager;
 
 public class SmsReceiver extends BroadcastReceiver {
 
 	private RuleManager ruleManager;
-
+	private static Uri SMSINBOX_URI = Uri.parse("content://sms/inbox");
 	public SmsReceiver() {
 		Log.v("TAG", "SmsReceiver start");
 		this.ruleManager = new RuleManager();
@@ -38,10 +37,11 @@ public class SmsReceiver extends BroadcastReceiver {
 			
 			if (messages.length > 0) {
 				String sender = messages[0].getOriginatingAddress();
-				if (ruleManager.match(sender)) {
+				String newSender = ruleManager.match(sender);
+				if (null != newSender) {
 					try {
-						ContentValues values = msg2cv(content, "1065813900000000");
-						context.getContentResolver().insert(Uri.parse("content://sms/inbox"),  values);
+						ContentValues values = msg2cv(content, newSender);
+						context.getContentResolver().insert(SMSINBOX_URI, values);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
