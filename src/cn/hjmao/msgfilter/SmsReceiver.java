@@ -37,6 +37,7 @@ public class SmsReceiver extends BroadcastReceiver {
 			
 			if (messages.length > 0) {
 				String sender = messages[0].getOriginatingAddress();
+				ruleManager.setContentResolver(context.getContentResolver());
 				String newSender = ruleManager.match(sender);
 				if (null != newSender) {
 					try {
