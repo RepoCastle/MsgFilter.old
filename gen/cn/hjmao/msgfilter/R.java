@@ -45,6 +45,9 @@ public final class R {
         public static final int menu_open=0x7f040005;
         public static final int menu_paste=0x7f04000a;
         public static final int menu_save=0x7f040009;
+        public static final int notif_contenttext=0x7f040011;
+        public static final int notif_contenttitle=0x7f040010;
+        public static final int notif_tickertext=0x7f04000f;
         public static final int rule_create=0x7f04000b;
         public static final int rule_edit=0x7f04000c;
         public static final int rule_edit_title=0x7f040004;
