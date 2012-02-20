@@ -125,6 +125,10 @@ public class RuleList extends ListActivity {
 		case R.id.context_delete:
 			getContentResolver().delete(ruleUri, null, null);
 			return true;
+			
+		case R.id.context_apply:
+			// FIXME:
+			return true;
 		default:
 			return super.onContextItemSelected(item);
 		}

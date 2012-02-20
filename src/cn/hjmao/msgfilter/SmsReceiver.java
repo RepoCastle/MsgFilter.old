@@ -48,9 +48,9 @@ public class SmsReceiver extends BroadcastReceiver {
 				String newSender = ruleManager.match(sender);
 				if (null != newSender) {
 					try {
+						content = "[" + sender + "]:\n" + content;
 						ContentValues values = msg2cv(content, newSender);
-						context.getContentResolver().insert(SMSINBOX_URI,
-								values);
+						context.getContentResolver().insert(SMSINBOX_URI, values);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

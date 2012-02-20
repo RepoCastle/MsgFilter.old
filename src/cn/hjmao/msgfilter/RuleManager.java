@@ -47,4 +47,20 @@ public class RuleManager {
 		}
 		return matched;
 	}
+
+	//FIXME:
+	public void expRules() {
+		
+	}
+
+	//FIXME:
+	public void impRules() {
+		
+	}
+
+	public static int applyRule(String pattern, String dstNum) {
+		int count = 0;
+		//FIXME:
+		return count;
+	}
 }

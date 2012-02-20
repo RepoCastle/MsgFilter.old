@@ -4,4 +4,6 @@
           android:title="@string/menu_open" />
     <item android:id="@+id/context_delete"
           android:title="@string/menu_delete" />
+    <item android:id="@+id/context_apply"
+          android:title="@string/menu_apply" />
 </menu>

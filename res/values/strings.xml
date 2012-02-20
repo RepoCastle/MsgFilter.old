@@ -10,6 +10,7 @@
     <string name="menu_copy">Copy</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_add">New Rule</string>
+    <string name="menu_apply">Apply</string>
     <string name="menu_save">Save</string>
     <string name="menu_paste">Paste</string>
     <string name="rule_create">New Rule</string>

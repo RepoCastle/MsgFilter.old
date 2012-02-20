@@ -19,10 +19,10 @@ public class MsgFilter {
         public static final Uri CONTENT_ID_URI_PATTERN = Uri.parse(SCHEME + AUTHORITY + PATH_RULE_ID + "/#");
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.msgfilter.rule";
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.msgfilter.rule";
-        public static final String DEFAULT_SORT_ORDER = "modified DESC";
         public static final String COLUMN_NAME_PATTERN = "pattern";
         public static final String COLUMN_NAME_DSTNUM = "dstnumber";
         public static final String COLUMN_NAME_CREATE_DATE = "created";
         public static final String COLUMN_NAME_MODIFICATION_DATE = "modified";
+        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_PATTERN + " DESC";
     }
 }
