@@ -5,8 +5,10 @@ import android.provider.BaseColumns;
 
 public class MsgFilter {
     public static final String AUTHORITY = "cn.hjmao.MsgFilter";
+    
     private MsgFilter() {
     }
+    
     public static final class Rules implements BaseColumns {
     	private Rules() {}
     	public static final String TABLE_NAME = "rules";

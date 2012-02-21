@@ -1,5 +1,6 @@
 package cn.hjmao.msgfilter;
 
+import cn.hjmao.msgfilter.utils.RuleManager;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -122,7 +123,9 @@ public class RuleEditor extends Activity {
 		values.put(MsgFilter.Rules.COLUMN_NAME_PATTERN, pattern);
 		values.put(MsgFilter.Rules.COLUMN_NAME_DSTNUM, dstnum);
 		getContentResolver().update(mUri, values, null, null);
+		RuleManager.setNeedReload(true);
 	}
+
 	private final void deleteRule() {
 		if (mCursor != null) {
 			mCursor.close();
@@ -130,11 +133,14 @@ public class RuleEditor extends Activity {
 			getContentResolver().delete(mUri, null, null);
 			mPatternText.setText("");
 			mDstNumText.setText("");
+			RuleManager.setNeedReload(true);
 		}
 	}
 	
-    public void onClickOk(View v) {
-    	
-        finish();
-    }
+	public void onClickOk(View v) {
+		finish();
+		if (mCursor != null) {
+			mCursor.close();
+		}
+	}
 }

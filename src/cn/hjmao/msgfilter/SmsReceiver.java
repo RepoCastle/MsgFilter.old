@@ -1,34 +1,21 @@
 package cn.hjmao.msgfilter;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import cn.hjmao.msgfilter.utils.Notify;
+import cn.hjmao.msgfilter.utils.RuleManager;
+import cn.hjmao.msgfilter.utils.SMSModifier;
 
 public class SmsReceiver extends BroadcastReceiver {
-
-	private Context context;
-
-	private RuleManager ruleManager;
-	private static Uri SMSINBOX_URI = Uri.parse("content://sms/inbox");
-
-	public SmsReceiver() {
-		Log.v("TAG", "SmsReceiver start");
-		this.ruleManager = new RuleManager();
-		Log.v("TAG", "SmsReceiver done");
-	}
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.v("TAG", "onReceive");
+		RuleManager.setContentResolver(context.getContentResolver());
 
-		this.context = context;
 		Object[] pdus = (Object[]) intent.getExtras().get("pdus");
 		if (pdus != null && pdus.length > 0) {
 			SmsMessage[] messages = new SmsMessage[pdus.length];
@@ -44,49 +31,14 @@ public class SmsReceiver extends BroadcastReceiver {
 
 			if (messages.length > 0) {
 				String sender = messages[0].getOriginatingAddress();
-				ruleManager.setContentResolver(context.getContentResolver());
-				String newSender = ruleManager.match(sender);
+				String newSender = RuleManager.match(sender);
 				if (null != newSender) {
-					try {
-						content = "[" + sender + "]:\n" + content;
-						ContentValues values = msg2cv(content, newSender);
-						context.getContentResolver().insert(SMSINBOX_URI, values);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					content = SMSModifier.smsBodyPrefix(sender) + content;
+					SMSModifier.smsInsert(context.getContentResolver(), newSender, content);
 					this.abortBroadcast();
-					notification(content);
+					Notify.statusBar(context, content);
 				}
 			}
 		}
-	}
-
-	private ContentValues msg2cv(String content, String newSender) {
-		ContentValues values = new ContentValues();
-		values.put("address", newSender);
-		values.put("read", 0);
-		values.put("status", -1);
-		values.put("type", 1);
-		values.put("body", content);
-		return values;
-	}
-
-	private void notification(String content) {
-		NotificationManager notifMng = (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
-		Notification notif = new Notification();
-		notif.icon = android.R.drawable.stat_notify_chat;
-		notif.tickerText = context.getText(R.string.notif_tickertext);
-		notif.defaults = Notification.DEFAULT_SOUND;
-		notif.flags |= Notification.FLAG_AUTO_CANCEL;
-		notif.flags |= Notification.DEFAULT_SOUND;
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setType("vnd.android-dir/mms-sms");
-		PendingIntent pIntent = PendingIntent.getBroadcast(context, 0, intent,
-				0);
-		notif.setLatestEventInfo(context,
-				context.getText(R.string.notif_contenttitle),
-				context.getText(R.string.notif_contenttext), pIntent);
-		notifMng.notify(0, notif);
 	}
 }

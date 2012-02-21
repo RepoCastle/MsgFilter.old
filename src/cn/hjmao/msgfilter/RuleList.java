@@ -1,6 +1,7 @@
 package cn.hjmao.msgfilter;
 
 import cn.hjmao.msgfilter.R;
+import cn.hjmao.msgfilter.utils.RuleManager;
 import android.app.ListActivity;
 import android.content.ComponentName;
 import android.content.ContentUris;
@@ -30,6 +31,8 @@ public class RuleList extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		RuleManager.setContentResolver(getContentResolver());
+		
 		setDefaultKeyMode(DEFAULT_KEYS_SHORTCUT);
 		Intent intent = getIntent();
 		if (intent.getData() == null) {
@@ -98,7 +101,6 @@ public class RuleList extends ListActivity {
 		if (cursor == null) {
 			return;
 		}
-
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.list_context_menu, menu);
 		menu.setHeaderTitle(cursor.getString(COLUMN_INDEX_PATTERN));
@@ -124,10 +126,14 @@ public class RuleList extends ListActivity {
 
 		case R.id.context_delete:
 			getContentResolver().delete(ruleUri, null, null);
+			RuleManager.setNeedReload(true);
 			return true;
 			
 		case R.id.context_apply:
-			// FIXME:
+			Cursor cursor = getContentResolver().query(ruleUri, PROJECTION, null, null, null);
+			cursor.moveToFirst();
+			String pattern = cursor.getString(COLUMN_INDEX_PATTERN);
+			RuleManager.applyRule(pattern);
 			return true;
 		default:
 			return super.onContextItemSelected(item);
