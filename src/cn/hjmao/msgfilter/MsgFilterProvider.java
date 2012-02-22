@@ -1,40 +1,33 @@
 package cn.hjmao.msgfilter;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
-import android.content.ClipDescription;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.ContentProvider.PipeDataWriter;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.Resources;
 import android.content.UriMatcher;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
 import android.util.Log;
 
-public class MsgFilterProvider extends ContentProvider implements
-		PipeDataWriter<Cursor> {
+
+/* --code for version 4.0 or upper--
+public class MsgFilterProvider extends ContentProvider implements PipeDataWriter<Cursor> {
+*/
+public class MsgFilterProvider extends ContentProvider {
 	private static final String TAG = "MsgFilterProvider";
 	private static final String DATABASE_NAME = "msgfilter.db";
 	private static final int DATABASE_VERSION = 2;
 	private static HashMap<String, String> sRulesProjectionMap;
 
+	/* --code for version 4.0 or upper--
 	private static final String[] READ_RULE_PROJECTION = new String[] {
 			MsgFilter.Rules._ID,
 			MsgFilter.Rules.COLUMN_NAME_TITLE,
@@ -43,6 +36,7 @@ public class MsgFilterProvider extends ContentProvider implements
 	private static final int READ_RULE_TITLE_INDEX = 1;
 	private static final int READ_RULE_PATTERN_INDEX = 2;
 	private static final int READ_RULE_DSTNUM_INDEX = 3;
+	*/
 	private static final int RULES = 1;
 	private static final int RULE_ID = 2;
 	private static final UriMatcher sUriMatcher;
@@ -231,6 +225,7 @@ public class MsgFilterProvider extends ContentProvider implements
 		}
 	}
 
+	/* --code for version 4.0 or upper--
     static ClipDescription RULE_STREAM_TYPES = new ClipDescription(null,new String[] { ClipDescription.MIMETYPE_TEXT_PLAIN });
 	@Override
 	public String[] getStreamTypes(Uri uri, String mimeTypeFilter) {
@@ -291,4 +286,5 @@ public class MsgFilterProvider extends ContentProvider implements
 			}
 		}
 	}
+	*/
 }

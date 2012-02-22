@@ -3,6 +3,5 @@
     <item android:id="@+id/menu_add"
           android:icon="@drawable/ic_menu_compose"
           android:title="@string/menu_add"
-          android:alphabeticShortcut='a'
-          android:showAsAction="always" />
+          android:alphabeticShortcut='a' />
 </menu>

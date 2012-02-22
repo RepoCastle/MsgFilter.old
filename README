@@ -1,1 +1,10 @@
-Test
+
+AndroidManifest.xml:
+<uses-sdk android:minSdkVersion="15" />
+android:theme="@android:style/Theme.Holo.Dialog"
+
+list_options_menu.xml:
+android:showAsAction="always"
+
+rule_list.xml:
+fill_parent

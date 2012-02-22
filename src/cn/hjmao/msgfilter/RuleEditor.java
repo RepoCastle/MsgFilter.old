@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 
 public class RuleEditor extends Activity {
-	private static final String TAG = "NoteEditor";
+	private static final String TAG = "RuleEditor";
 	private static final String[] PROJECTION = new String[] {
 			MsgFilter.Rules._ID,
 			MsgFilter.Rules.COLUMN_NAME_TITLE,
