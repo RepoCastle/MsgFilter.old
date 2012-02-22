@@ -27,16 +27,6 @@ public class MsgFilterProvider extends ContentProvider {
 	private static final int DATABASE_VERSION = 2;
 	private static HashMap<String, String> sRulesProjectionMap;
 
-	/* --code for version 4.0 or upper--
-	private static final String[] READ_RULE_PROJECTION = new String[] {
-			MsgFilter.Rules._ID,
-			MsgFilter.Rules.COLUMN_NAME_TITLE,
-			MsgFilter.Rules.COLUMN_NAME_PATTERN,
-			MsgFilter.Rules.COLUMN_NAME_DSTNUM};
-	private static final int READ_RULE_TITLE_INDEX = 1;
-	private static final int READ_RULE_PATTERN_INDEX = 2;
-	private static final int READ_RULE_DSTNUM_INDEX = 3;
-	*/
 	private static final int RULES = 1;
 	private static final int RULE_ID = 2;
 	private static final UriMatcher sUriMatcher;
@@ -226,6 +216,15 @@ public class MsgFilterProvider extends ContentProvider {
 	}
 
 	/* --code for version 4.0 or upper--
+	private static final String[] READ_RULE_PROJECTION = new String[] {
+			MsgFilter.Rules._ID,
+			MsgFilter.Rules.COLUMN_NAME_TITLE,
+			MsgFilter.Rules.COLUMN_NAME_PATTERN,
+			MsgFilter.Rules.COLUMN_NAME_DSTNUM};
+	private static final int READ_RULE_TITLE_INDEX = 1;
+	private static final int READ_RULE_PATTERN_INDEX = 2;
+	private static final int READ_RULE_DSTNUM_INDEX = 3;
+	
     static ClipDescription RULE_STREAM_TYPES = new ClipDescription(null,new String[] { ClipDescription.MIMETYPE_TEXT_PLAIN });
 	@Override
 	public String[] getStreamTypes(Uri uri, String mimeTypeFilter) {

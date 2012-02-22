@@ -4,7 +4,7 @@
     android:versionCode="7"
     android:versionName="1.5" >
 
-    <uses-sdk android:minSdkVersion="7" />
+    <uses-sdk android:minSdkVersion="8" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.WRITE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
@@ -19,8 +19,8 @@
             <grant-uri-permission android:pathPattern=".*" />
         </provider>
 
-        <activity
-            android:name=".RuleList"
+        <activity android:name="RuleList"
+            android:theme="@android:style/Theme.Holo"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,10 +44,10 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.msgfilter.rule" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="RuleEditor"
+        <activity android:name="RuleEditor"
             android:icon="@drawable/ic_menu_edit"
             android:label="@string/rule_edit_title"
+            android:theme="@android:style/Theme.Holo.Dialog"
             android:windowSoftInputMode="stateVisible" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -70,7 +70,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="cn.hjmao.msgfilter.SmsReceiver" >
+        <receiver android:name="SmsReceiver" >
             <intent-filter android:priority="10000" >
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" >
                 </action>

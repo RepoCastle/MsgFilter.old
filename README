@@ -8,3 +8,6 @@ android:showAsAction="always"
 
 rule_list.xml:
 fill_parent
+
+MsgFilterProvider.java:
+comments
