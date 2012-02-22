@@ -3,6 +3,7 @@
 
     <string name="app_name">MsgFilter</string>
     <string name="button_ok">OK</string>
+    <string name="hint_title">Rule Name</string>
     <string name="hint_pattern">Number Pattern</string>
     <string name="hint_dstnum">Destination Number</string>
     <string name="rule_edit_title">Edit Rule</string>
@@ -15,8 +16,9 @@
     <string name="menu_paste">Paste</string>
     <string name="rule_create">New Rule</string>
     <string name="rule_edit">Edit: %1$s</string>
-    <string name="error_pattern">Error</string>
-    <string name="error_message">Error loading note</string>
+    <string name="error_title">Error</string>
+    <string name="error_pattern">Error loading pattern</string>
+    <string name="error_message">Error loading dstnum</string>
     <string name="notif_tickertext">New msgfilter notification</string>
     <string name="notif_contenttitle">MsgFilter</string>
     <string name="notif_contenttext">You have unread msgfilter notifcation!</string>

@@ -24,9 +24,11 @@ public class RuleList extends ListActivity {
 	private static final String TAG = "NotesList";
 	private static final String[] PROJECTION = new String[] {
 			MsgFilter.Rules._ID,
+			MsgFilter.Rules.COLUMN_NAME_TITLE,
 			MsgFilter.Rules.COLUMN_NAME_PATTERN,
 	};
-	private static final int COLUMN_INDEX_PATTERN = 1;
+	private static final int COLUMN_INDEX_TITLE = 1;
+	private static final int COLUMN_INDEX_PATTERN = 2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class RuleList extends ListActivity {
 		}
 		getListView().setOnCreateContextMenuListener(this);
 		Cursor cursor = managedQuery(getIntent().getData(), PROJECTION, null, null, MsgFilter.Rules.DEFAULT_SORT_ORDER);
-		String[] dataColumns = { MsgFilter.Rules.COLUMN_NAME_PATTERN };
+		String[] dataColumns = { MsgFilter.Rules.COLUMN_NAME_TITLE };
 		int[] viewIDs = { android.R.id.text1 };
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.rule_list, cursor, dataColumns, viewIDs);
 		setListAdapter(adapter);
@@ -103,7 +105,7 @@ public class RuleList extends ListActivity {
 		}
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.list_context_menu, menu);
-		menu.setHeaderTitle(cursor.getString(COLUMN_INDEX_PATTERN));
+		menu.setHeaderTitle(cursor.getString(COLUMN_INDEX_TITLE));
 		Intent intent = new Intent(null, Uri.withAppendedPath(getIntent().getData(), Integer.toString((int) info.id)));
 		intent.addCategory(Intent.CATEGORY_ALTERNATIVE);
 		menu.addIntentOptions(Menu.CATEGORY_ALTERNATIVE, 0, 0, new ComponentName(this, RuleList.class), null, intent, 0, null);

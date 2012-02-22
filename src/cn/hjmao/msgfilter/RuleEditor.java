@@ -16,8 +16,9 @@ public class RuleEditor extends Activity {
 	private static final String TAG = "NoteEditor";
 	private static final String[] PROJECTION = new String[] {
 			MsgFilter.Rules._ID,
+			MsgFilter.Rules.COLUMN_NAME_TITLE,
 			MsgFilter.Rules.COLUMN_NAME_PATTERN,
-			MsgFilter.Rules.COLUMN_NAME_DSTNUM };
+			MsgFilter.Rules.COLUMN_NAME_DSTNUM};
 	private static final String ORIGINAL_CONTENT = "origContent";
 	private static final int STATE_EDIT = 0;
 	private static final int STATE_INSERT = 1;
@@ -25,6 +26,7 @@ public class RuleEditor extends Activity {
 	private int mState;
 	private Uri mUri;
 	private Cursor mCursor;
+	private EditText mTitleText;
 	private EditText mPatternText;
 	private EditText mDstNumText;
 	private String mOriginalContent;
@@ -54,6 +56,7 @@ public class RuleEditor extends Activity {
 		}
 		mCursor = managedQuery(mUri, PROJECTION, null, null, null);
 		setContentView(R.layout.rule_editor);
+		mTitleText = (EditText) findViewById(R.id.title);
 		mPatternText = (EditText) findViewById(R.id.pattern);
 		mDstNumText = (EditText) findViewById(R.id.dstnum);
 
@@ -68,26 +71,32 @@ public class RuleEditor extends Activity {
 		if (mCursor != null) {
 			mCursor.requery();
 			mCursor.moveToFirst();
-			String pattern = "";
+			String title = "";
 			if (mState == STATE_EDIT) {
-				int colPatternIndex = mCursor.getColumnIndex(MsgFilter.Rules.COLUMN_NAME_PATTERN);
-				pattern = mCursor.getString(colPatternIndex);
+				int colTitleIndex = mCursor.getColumnIndex(MsgFilter.Rules.COLUMN_NAME_TITLE);
+				title = mCursor.getString(colTitleIndex);
 				Resources res = getResources();
-				String title = String.format(res.getString(R.string.rule_edit), pattern);
-				setTitle(title);
+				String name = String.format(res.getString(R.string.rule_edit), title);
+				setTitle(name);
 			} else if (mState == STATE_INSERT) {
 				setTitle(getText(R.string.rule_create));
 			}
-			mPatternText.setTextKeepState(pattern);
+			mTitleText.setTextKeepState(title);
 			
 			int colDstNumIndex = mCursor.getColumnIndex(MsgFilter.Rules.COLUMN_NAME_DSTNUM);
 			String dstNum = mCursor.getString(colDstNumIndex);
 			mDstNumText.setTextKeepState(dstNum);
+			
+			int colPatternIndex = mCursor.getColumnIndex(MsgFilter.Rules.COLUMN_NAME_PATTERN);
+			String pattern = mCursor.getString(colPatternIndex);
+			mPatternText.setTextKeepState(pattern);
+			
 			if (mOriginalContent == null) {
 				mOriginalContent = dstNum;
 			}
 		} else {
-			setTitle(getText(R.string.error_pattern));
+			setTitle(getText(R.string.error_title));
+			mTitleText.setText(getText(R.string.error_title));
 			mPatternText.setText(getText(R.string.error_pattern));
 			mDstNumText.setText(getText(R.string.error_message));
 		}
@@ -102,26 +111,29 @@ public class RuleEditor extends Activity {
 	protected void onPause() {
 		super.onPause();
 		if (mCursor != null) {
+			String title = mTitleText.getText().toString();
 			String pattern = mPatternText.getText().toString();
 			String dstnum = mDstNumText.getText().toString();
+			int titleLen = title.length();
 			int patternLen = pattern.length();
 			int dstnumLen = dstnum.length();
 			
-			if (isFinishing() && (patternLen == 0) && (dstnumLen == 0)) {
+			if (isFinishing() && (patternLen == 0) && (dstnumLen == 0) && (titleLen == 0)) {
 				setResult(RESULT_CANCELED);
 				deleteRule();
 			} else {
-				updateRule(pattern, dstnum);
+				updateRule(title, pattern, dstnum);
 				mState = STATE_EDIT;
 			}
 		}
 	}
 
-	private final void updateRule(String pattern, String dstnum) {
+	private final void updateRule(String title, String pattern, String dstnum) {
 		ContentValues values = new ContentValues();
-		values.put(MsgFilter.Rules.COLUMN_NAME_MODIFICATION_DATE, System.currentTimeMillis());
+		values.put(MsgFilter.Rules.COLUMN_NAME_TITLE, title);
 		values.put(MsgFilter.Rules.COLUMN_NAME_PATTERN, pattern);
 		values.put(MsgFilter.Rules.COLUMN_NAME_DSTNUM, dstnum);
+		values.put(MsgFilter.Rules.COLUMN_NAME_MODIFICATION_DATE, System.currentTimeMillis());
 		getContentResolver().update(mUri, values, null, null);
 		RuleManager.setNeedReload(true);
 	}
@@ -131,6 +143,7 @@ public class RuleEditor extends Activity {
 			mCursor.close();
 			mCursor = null;
 			getContentResolver().delete(mUri, null, null);
+			mTitleText.setText("");
 			mPatternText.setText("");
 			mDstNumText.setText("");
 			RuleManager.setNeedReload(true);

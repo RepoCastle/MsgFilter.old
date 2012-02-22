@@ -37,10 +37,12 @@ public class MsgFilterProvider extends ContentProvider implements
 
 	private static final String[] READ_RULE_PROJECTION = new String[] {
 			MsgFilter.Rules._ID,
+			MsgFilter.Rules.COLUMN_NAME_TITLE,
 			MsgFilter.Rules.COLUMN_NAME_PATTERN,
-			MsgFilter.Rules.COLUMN_NAME_DSTNUM, };
-	private static final int READ_RULE_PATTERN_INDEX = 1;
-	private static final int READ_RULE_DSTNUM_INDEX = 2;
+			MsgFilter.Rules.COLUMN_NAME_DSTNUM};
+	private static final int READ_RULE_TITLE_INDEX = 1;
+	private static final int READ_RULE_PATTERN_INDEX = 2;
+	private static final int READ_RULE_DSTNUM_INDEX = 3;
 	private static final int RULES = 1;
 	private static final int RULE_ID = 2;
 	private static final UriMatcher sUriMatcher;
@@ -54,6 +56,7 @@ public class MsgFilterProvider extends ContentProvider implements
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + MsgFilter.Rules.TABLE_NAME + " ("
 					+ MsgFilter.Rules._ID + " INTEGER PRIMARY KEY,"
+					+ MsgFilter.Rules.COLUMN_NAME_TITLE + " TEXT,"
 					+ MsgFilter.Rules.COLUMN_NAME_PATTERN + " TEXT,"
 					+ MsgFilter.Rules.COLUMN_NAME_DSTNUM + " TEXT,"
 					+ MsgFilter.Rules.COLUMN_NAME_CREATE_DATE + " INTEGER,"
@@ -75,6 +78,7 @@ public class MsgFilterProvider extends ContentProvider implements
 		sUriMatcher.addURI(MsgFilter.AUTHORITY, "rules/#", RULE_ID);
 		sRulesProjectionMap = new HashMap<String, String>();
 		sRulesProjectionMap.put(MsgFilter.Rules._ID, MsgFilter.Rules._ID);
+		sRulesProjectionMap.put(MsgFilter.Rules.COLUMN_NAME_TITLE, MsgFilter.Rules.COLUMN_NAME_TITLE);
 		sRulesProjectionMap.put(MsgFilter.Rules.COLUMN_NAME_PATTERN, MsgFilter.Rules.COLUMN_NAME_PATTERN);
 		sRulesProjectionMap.put(MsgFilter.Rules.COLUMN_NAME_DSTNUM, MsgFilter.Rules.COLUMN_NAME_DSTNUM);
 		sRulesProjectionMap.put(MsgFilter.Rules.COLUMN_NAME_CREATE_DATE, MsgFilter.Rules.COLUMN_NAME_CREATE_DATE);
@@ -101,9 +105,13 @@ public class MsgFilterProvider extends ContentProvider implements
 			values.put(MsgFilter.Rules.COLUMN_NAME_MODIFICATION_DATE, now);
 		}
 
-		if (values.containsKey(MsgFilter.Rules.COLUMN_NAME_PATTERN) == false) {
+		if (values.containsKey(MsgFilter.Rules.COLUMN_NAME_TITLE) == false) {
 			Resources r = Resources.getSystem();
-			values.put(MsgFilter.Rules.COLUMN_NAME_PATTERN, r.getString(android.R.string.untitled));
+			values.put(MsgFilter.Rules.COLUMN_NAME_TITLE, r.getString(android.R.string.untitled));
+		}
+
+		if (values.containsKey(MsgFilter.Rules.COLUMN_NAME_PATTERN) == false) {
+			values.put(MsgFilter.Rules.COLUMN_NAME_PATTERN, "");
 		}
 
 		if (values.containsKey(MsgFilter.Rules.COLUMN_NAME_DSTNUM) == false) {
@@ -265,6 +273,8 @@ public class MsgFilterProvider extends ContentProvider implements
 		PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(new OutputStreamWriter(fout, "UTF-8"));
+			pw.println(c.getString(READ_RULE_TITLE_INDEX));
+			pw.println("");
 			pw.println(c.getString(READ_RULE_PATTERN_INDEX));
 			pw.println("");
 			pw.println(c.getString(READ_RULE_DSTNUM_INDEX));
