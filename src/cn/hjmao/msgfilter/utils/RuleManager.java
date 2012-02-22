@@ -86,16 +86,16 @@ public class RuleManager {
 			String dstNum = RuleManager.match(sender, pattern);
 			if (dstNum != null) {
 				long smsID = cursor.getLong(cursor.getColumnIndex("_id"));
-				
 				String newSender = dstNum;
 				String body = cursor.getString(cursor.getColumnIndex("body"));
-				if (!SMSModifier.isSmsBodyModifiedByMsgFilter(body)) {
+
+				if (!SMSModifier.hasSmsBodyModifiedByMsgFilter(body)) {
 					body = SMSModifier.smsBodyPrefix(sender) + body;
+					long threadID = cursor.getLong(cursor.getColumnIndex("thread_id"));
+					SMSModifier.smsDelete(contentResolver, threadID, smsID);
+					SMSModifier.smsInsert(contentResolver, newSender, body);
+					count++;
 				}
-				long threadID = cursor.getLong(cursor.getColumnIndex("thread_id"));
-				SMSModifier.smsDelete(contentResolver, threadID, smsID);
-				SMSModifier.smsInsert(contentResolver, newSender, body);
-				count++;
 			}
 		}
 		cursor.close();

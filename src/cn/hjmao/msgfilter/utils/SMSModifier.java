@@ -25,11 +25,10 @@ public class SMSModifier {
 		return content;
 	}
 
-	public static boolean isSmsBodyModifiedByMsgFilter(String body) {
+	public static boolean hasSmsBodyModifiedByMsgFilter(String body) {
 		boolean isModified = false;
 		int index = body.indexOf(':');
-		if (index != -1
-				&& body.substring(0, index + 1).matches("^\\[mf\\..*\\]:")) {
+		if (index != -1 && body.substring(0, index + 1).matches("^\\[mf\\..*\\]:")) {
 			isModified = true;
 		}
 		return isModified;
